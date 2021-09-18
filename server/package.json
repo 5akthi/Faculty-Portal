@@ -16,5 +16,8 @@
     "url": "https://github.com/5akthi/Faculty-Portal/issues"
   },
   "homepage": "https://github.com/5akthi/Faculty-Portal#readme",
-  "description": ""
+  "description": "",
+  "devDependencies": {
+    "nodemon": "^2.0.12"
+  }
 }
