@@ -59,18 +59,6 @@ module.exports = {
             console.log("Error in faculty login", err.message)
         }
     },
-    getAllSubjects: async (req, res, next) => {
-        try {
-            const allSubjects = await Subject.find({})
-            if (!allSubjects) {
-                return res.status(404).json({ message: "You havent registered any subject yet." })
-            }
-            res.status(200).json({ allSubjects })
-        }
-        catch (err) {
-            res.status(400).json({ message: `error in getting all Subjects", ${err.message}` })
-        }
-    },
     updatePassword: async (req, res, next) => {
         try {
             const { errors, isValid } = validateFacultyUpdatePassword(req.body);
