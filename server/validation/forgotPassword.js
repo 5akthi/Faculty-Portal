@@ -23,4 +23,4 @@ const validateUserUpdatePassword = (data) => {
 }
 
 
-module.exports = validateUserUpdatePassword
+module.exports = validateUserUpdatePassword;
