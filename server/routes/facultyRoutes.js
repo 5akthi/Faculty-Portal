@@ -16,5 +16,4 @@ router.post('/updateProfile', passport.authenticate('jwt', { session: false }), 
 
 router.post('/updatePassword', passport.authenticate('jwt', { session: false }), updatePassword)
 
-
 module.exports = router
