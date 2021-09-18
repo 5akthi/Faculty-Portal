@@ -148,7 +148,7 @@ module.exports = {
     updateProfile: async (req, res, next) => {
         try {
             const { email, gender, facultyMobileNumber,
-                aadharCard, designation, department } = req.body
+                aadharCard, designation, department, experience, education } = req.body
             const userPostImg = await bufferConversion(req.file.originalname, req.file.buffer)
             const imgResponse = await cloudinary.uploader.upload(userPostImg)
             const faculty = await Faculty.findOne({ email })
@@ -170,6 +170,14 @@ module.exports = {
             }
             if (department) {
                 faculty.department = department;
+                await faculty.save();
+            }
+            if (education) {
+                faculty.education = education;
+                await faculty.save();
+            }
+            if(experience) {
+                faculty.experience = experience;
                 await faculty.save();
             }
             faculty.avatar = imgResponse.secure_url;

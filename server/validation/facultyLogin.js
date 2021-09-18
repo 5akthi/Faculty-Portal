@@ -4,15 +4,11 @@ const isEmpty = require('./is-empty');
 
 const validateFacultyLoginInput = (data) => {
     let errors = {}
-    data.registrationNumber = !isEmpty(data.registrationNumber) ? data.registrationNumber : '';
+    data.email = !isEmpty(data.email) ? data.email : '';
     data.password = !isEmpty(data.password) ? data.password : '';
 
-    if (!Validator.isLength(data.registrationNumber, { min: 12, max: 12 })) {
-        errors.registrationNumber = 'Registration Number must be of 12 characters';
-    }
-
-    if (Validator.isEmpty(data.registrationNumber)) {
-        errors.registrationNumber = 'Registration Number field is required';
+    if (!Validator.isEmail(data.email)) {
+        errors.email = 'Email ID is required';
     }
 
     if (Validator.isEmpty(data.password)) {

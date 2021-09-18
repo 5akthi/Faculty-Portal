@@ -32,9 +32,6 @@ const facultySchema = new Schema({
     avatar: {
         type: String
     },
-    aadharCard: {
-        type: Number
-    },
     dob: {
         type: String,
         required: true
@@ -104,7 +101,7 @@ const facultySchema = new Schema({
     seminars:{
         type: [String]
     },
-    interests:{
+    specialization:{
         type: [String]
     },
     date: {

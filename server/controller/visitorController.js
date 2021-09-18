@@ -1,11 +1,34 @@
 const Faculty = require('../models/faculty');
+const validateFacultyRegisterInput = require('../validation/facultyRegister');
+const gravatar = require('gravatar');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 module.exports = {
     fetchFaculties: async (req, res, next) => {
         try {
             const { department, designation } = req.body;
-            const allFaculties = await Faculty.find({ department, course, designation });
-            res.status(200).json({ result: allFaculties});
+            let allFaculties;
+            if(department && designation)
+            {
+                allFaculties = await Faculty.find({ department, designation });
+                res.status(200).json({ result: allFaculties});
+            }
+            else if(department)
+            {
+                allFaculties = await Faculty.find({ department });
+                res.status(200).json({ result: allFaculties});                
+            }
+            else if(designation)
+            {
+                allFaculties = await Faculty.find({ designation });
+                res.status(200).json({ result: allFaculties});                 
+            }
+            else
+            {
+                allFaculties = await Faculty.find();
+                res.status(200).json({ result: allFaculties});
+            }
         }
         catch (err) {
             console.log("Error in gettting all faculties", err.message)
@@ -22,7 +45,7 @@ module.exports = {
             }
 
             const { name, email, designation, department, facultyMobileNumber,
-                aadharCard, dob, gender, publications, seminars, interests, password , education, experience } = req.body;
+                 dob, gender, publications, seminars, interests, password , education, experience } = req.body;
             const faculty = await Faculty.findOne({ email });
 
             if (faculty) {
@@ -47,7 +70,6 @@ module.exports = {
                 facultyMobileNumber,
                 gender,
                 avatar,
-                aadharCard,
                 dob,
                 experience,
                 education,

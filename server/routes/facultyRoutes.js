@@ -12,7 +12,7 @@ router.post('/forgotPassword', forgotPassword)
 
 router.post('/postOTP', postOTP)
 
-router.post('/updateProfile', passport.authenticate('jwt', { session: false }), upload.single("avatar") ,updateProfile)
+router.post('/updateProfile', passport.authenticate('jwt', { session: false }), upload.single("avatar") , updateProfile)
 
 router.post('/updatePassword', passport.authenticate('jwt', { session: false }), updatePassword)
 
