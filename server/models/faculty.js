@@ -12,21 +12,12 @@ const facultySchema = new Schema({
         required: true,
         unique:true
     },
-    avatar: {
-        type: String
-    },
-    password: {
-        type: String,
-    },
-    registrationNumber: {
-        type: String,
-    },
-    gender: {
-        type: String,
-    },
     designation: {
         type: String,
         required: true
+    },
+    password: {
+        type: String,
     },
     department: {
         type: String, 
@@ -35,6 +26,12 @@ const facultySchema = new Schema({
     facultyMobileNumber: {
         type: Number
     },
+    gender: {
+        type: String,
+    },
+    avatar: {
+        type: String
+    },
     aadharCard: {
         type: Number
     },
@@ -42,13 +39,78 @@ const facultySchema = new Schema({
         type: String,
         required: true
     },
-    joiningYear: {
-        type: Number,
-        required: true 
+    experience: [
+        {
+          title: {
+            type: String,
+            required: true
+          },
+          company: {
+            type: String,
+            required: true
+          },
+          location: {
+            type: String
+          },
+          from: {
+            type: Date,
+            required: true
+          },
+          to: {
+            type: Date
+          },
+          current: {
+            type: Boolean,
+            default: false
+          },
+          description: {
+            type: String
+          }
+        }
+      ],
+      education: [
+        {
+          school: {
+            type: String,
+            required: true
+          },
+          degree: {
+            type: String,
+            required: true
+          },
+          fieldofstudy: {
+            type: String,
+            required: true
+          },
+          from: {
+            type: Date,
+            required: true
+          },
+          to: {
+            type: Date
+          },
+          current: {
+            type: Boolean,
+            default: false
+          },
+          description: {
+            type: String
+          }
+        }
+      ],
+    publications:{
+        type: [String]
     },
-    subjectsCanTeach: [{
-        type: String
-    }],
+    seminars:{
+        type: [String]
+    },
+    interests:{
+        type: [String]
+    },
+    date: {
+        type: Date,
+        default: Date.now
+    },
     otp: {
         type: String
     }

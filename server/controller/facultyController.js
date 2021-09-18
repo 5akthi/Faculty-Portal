@@ -1,11 +1,7 @@
 const bcrypt = require("bcryptjs")
 const jwt = require('jsonwebtoken')
 const sendEmail = require('../utils/nodemailer')
-// const Student = require('../models/student')
-// const Subject = require('../models/subject')
 const Faculty = require('../models/faculty')
-// const Attendence = require('../models/attendence')
-// const Mark = require('../models/marks')
 
 const keys = require('../config/key')
 
@@ -14,11 +10,9 @@ const bufferConversion = require('../utils/bufferConversion')
 const cloudinary = require('../utils/cloudinary')
 
 const validateFacultyLoginInput = require('../validation/facultyLogin')
-// const validateFetchStudentsInput = require('../validation/facultyFetchStudent')
 const validateFacultyUpdatePassword = require('../validation/FacultyUpdatePassword')
 const validateForgotPassword = require('../validation/forgotPassword')
 const validateOTP = require('../validation/otpValidation')
-// const validateFacultyUploadMarks = require('../validation/facultyUploadMarks')
 
 module.exports = {
     facultyLogin: async (req, res, next) => {
@@ -28,11 +22,11 @@ module.exports = {
             if (!isValid) {
               return res.status(400).json(errors);
             }
-            const { registrationNumber, password } = req.body;
+            const { email, password } = req.body;
 
-            const faculty = await Faculty.findOne({ registrationNumber })
+            const faculty = await Faculty.findOne({ email })
             if (!faculty) {
-                errors.registrationNumber = 'Registration number not found';
+                errors.email = 'Faculty does not exist';
                 return res.status(404).json(errors);
             }
             const isCorrect = await bcrypt.compare(password, faculty.password)
@@ -65,12 +59,12 @@ module.exports = {
             if (!isValid) {
                 return res.status(400).json(errors);
             }
-            const { registrationNumber, oldPassword, newPassword, confirmNewPassword } = req.body
+            const { email, oldPassword, newPassword, confirmNewPassword } = req.body
             if (newPassword !== confirmNewPassword) {
                 errors.confirmNewPassword = 'Password Mismatch'
                 return res.status(404).json(errors);
             }
-            const faculty = await Faculty.findOne({ registrationNumber })
+            const faculty = await Faculty.findOne({ email });
             const isCorrect = await bcrypt.compare(oldPassword, faculty.password)
             if (!isCorrect) {
                 errors.oldPassword = 'Invalid old Password';
@@ -79,11 +73,11 @@ module.exports = {
             let hashedPassword;
             hashedPassword = await bcrypt.hash(newPassword, 10)
             faculty.password = hashedPassword;
-            await faculty.save()
-            res.status(200).json({ message: "Password Updated" })
+            await faculty.save();
+            res.status(200).json({ message: "Password Updated" });
         }
         catch (err) {
-            console.log("Error in updating password", err.message)
+            console.log("Error in updating password", err.message);
         }
     },
     forgotPassword: async (req, res, next) => {
@@ -95,7 +89,7 @@ module.exports = {
             const { email } = req.body
             const faculty = await Faculty.findOne({ email })
             if (!faculty) {
-                errors.email = "Email Not found, Provide registered email"
+                errors.email = "Email not found, Provide registered email"
                 return res.status(400).json(errors)
             }
             function generateOTP() {
@@ -154,25 +148,33 @@ module.exports = {
     updateProfile: async (req, res, next) => {
         try {
             const { email, gender, facultyMobileNumber,
-                aadharCard } = req.body
+                aadharCard, designation, department } = req.body
             const userPostImg = await bufferConversion(req.file.originalname, req.file.buffer)
             const imgResponse = await cloudinary.uploader.upload(userPostImg)
             const faculty = await Faculty.findOne({ email })
             if (gender) {
-                faculty.gender = gender
-                await faculty.save()
+                faculty.gender = gender;
+                await faculty.save();
             }
             if (facultyMobileNumber) {
-                faculty.facultyMobileNumber = facultyMobileNumber
-                await faculty.save()
+                faculty.facultyMobileNumber = facultyMobileNumber;
+                await faculty.save();
             }
             if (aadharCard) {
-                faculty.aadharCard = aadharCard
-                await faculty.save()
+                faculty.aadharCard = aadharCard;
+                await faculty.save();
             }
-            faculty.avatar = imgResponse.secure_url
-            await faculty.save()
-            res.status(200).json(faculty)
+            if (designation) {
+                faculty.designation = designation;
+                await faculty.save();
+            }
+            if (department) {
+                faculty.department = department;
+                await faculty.save();
+            }
+            faculty.avatar = imgResponse.secure_url;
+            await faculty.save();
+            res.status(200).json(faculty);
         }
         catch (err) {
             console.log("Error in updating Profile", err.message)

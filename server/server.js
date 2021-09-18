@@ -29,7 +29,8 @@ app.use(function (req, res, next) {
     next();
 });
 
-const facultyRoutes = require('./routes/facultyRoutes')
+const facultyRoutes = require('./routes/facultyRoutes');
+const visitorRoute = require('./routes/visitorRoute');
 
 //Passport Middleware
 app.use(passport.initialize());
@@ -56,6 +57,7 @@ io.on('connection', (socket) => {
 })
 
 //ROUTES
+app.use('/api/visitor', visitorRoute);
 app.use('/api/faculty', facultyRoutes);
 
 //Catching 404 Error
