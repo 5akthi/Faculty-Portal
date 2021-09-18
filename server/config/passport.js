@@ -11,7 +11,7 @@ opts.secretOrKey = keys.secretOrKey;
 module.exports = passport => {
     passport.use(
         new JwtStrategy(opts, async (jwt_payload, done) => {
-            const student = await Faculty.findById(jwt_payload.id);
+            const faculty = await Faculty.findById(jwt_payload.id);
             if (faculty) {
                 return done(null, faculty);
             } 
